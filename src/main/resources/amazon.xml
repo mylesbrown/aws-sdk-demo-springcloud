@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aws-context="http://www.springframework.org/schema/cloud/aws/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/cloud/aws/context
+        http://www.springframework.org/schema/cloud/aws/context/spring-cloud-aws-context-1.0.xsd">
+
+	<beans profile="local">
+		<!--  When testing locally, run in us-west-2 and use specific access key and secret key -->
+        <aws-context:context-region  region="us-west-2"/>
+		<aws-context:context-credentials  >
+			<aws-context:simple-credentials 
+		       access-key="${cloud.aws.credentials.accessKey}" 
+		       secret-key="${cloud.aws.credentials.secretKey}"/>
+		</aws-context:context-credentials>
+	
+  		<aws-context:context-instance-data  amazon-ec2="myCustomClient"/>
+  		<bean id="myCustomClient" class="com.amazonaws.services.ec2.AmazonEC2Client" />	
+	
+	</beans>
+
+<!-- 	<beans profile="default" >
+		 When no profile specified, we assume we are running on an instance within AWS.
+			Obtain the region automatically, use the instance profile of the instance we are running 
+			in to get the role which will determine what we can do. 
+	  	<aws-context:context-region auto-detect="true" />           
+		<aws-context:context-credentials  >
+			<aws-context:instance-profile-credentials />
+		</aws-context:context-credentials>
+	</beans>            -->
+</beans>
